@@ -1,0 +1,80 @@
+//codigo usuario
+package tarea4;
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.io.StringReader;
+
+
+//Codigo para el parser, variables, metodos
+parser code
+{:
+    public Nodo nodo;
+
+:}
+
+//Coidgo para las acciones gramaticales
+
+action code
+{:
+    
+:}
+
+//Declaraciones 
+terminal NUM, MAS, POR, P_A, P_C, ID; 
+
+
+
+// declaracion no terminales
+non terminal INICIO, s, o;
+
+
+//presedencia de menor a mayor
+precedence left MAS;
+precedence left POR;
+//precedence left MAS;
+
+
+
+start with INICIO;
+
+//Reglas Semanticas
+
+
+INICIO ::=    s;
+
+s ::= o:a {:
+                                
+                                parser.nodo = (Nodo) a;
+        :} ;
+
+
+o ::= o:a POR o:b {:
+                                Nodo nodoA = (Nodo)a;
+                                Nodo nodoB = (Nodo)b;
+                                Nodo nodo = new Nodo(nodoA,nodoB,"*");
+                                nodo.setTxtSalida(nodoA.getTxtSalida()+nodoB.getTxtSalida()+"*");
+                                System.out.println(nodo.getTxtSalida());
+                                RESULT = nodo;
+         :}
+        |o:a MAS o:b {:
+                                Nodo nodoA = (Nodo)a;
+                                Nodo nodoB = (Nodo)b;
+                                Nodo nodo = new Nodo(nodoA,nodoB,"+");
+                                nodo.setTxtSalida(nodoA.getTxtSalida()+nodoB.getTxtSalida()+"+");
+                                System.out.println(nodo.getTxtSalida());
+                                RESULT = nodo;
+         :}
+        |NUM:a {:
+                                Nodo nodo = new Nodo(""+a);
+                                nodo.setTxtSalida(""+a);
+                                RESULT = nodo;
+         :}
+        |ID:a {:
+                                Nodo nodo = new Nodo(""+a);
+                                nodo.setTxtSalida(""+a);
+                                RESULT = nodo;
+         :}
+        |P_A o:a P_C {: 
+                                Nodo nodo = (Nodo) a;
+                                RESULT = nodo;
+        :};
